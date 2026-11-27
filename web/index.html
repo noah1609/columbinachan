@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Columbina Discord Bot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE occasion, hushed: a lullaby sung under the moon, not a loud bot landing page
+   IDEA a moonlit night sky with drifting white feathers; the page reads like a quiet invitation card
+   PICTURE large moon with feathers and notes, beside a live-looking Discord chat showing what she does
+   COLOUR night violet ground, moonlight ink, lavender support, one rose accent for the invite
+   TYPE Cormorant Garamond (display) + Be Vietnam Pro (text, full Vietnamese)
+   LAYOUT laptop: title + invite left, chat right over the moon; phone: title, moon+chat, buttons */
+:root{color-scheme:dark;--bg:#120f24;--bg2:#1b1636;--panel:#221c42;--line:#3a3166;--ink:#eeeaff;--soft:#b7aed9;--lav:#b9a7ff;--rose:#ff8fb3;--rose-ink:#2a0f1c}
+:root[data-theme=light]{color-scheme:dark}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Be Vietnam Pro",system-ui,sans-serif;overflow-x:clip}
+a{color:var(--lav)}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:700;line-height:1.05;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h1{font-size:clamp(52px,8vw,92px)}
+h2{font-size:clamp(34px,4.4vw,48px);margin-bottom:12px}
+h3{font-size:26px}
+p{margin:0}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding-block:clamp(40px,6vw,88px);padding-inline:max(5vw,16px)}
+nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:12px max(5vw,16px)}
+.brand{font:700 26px "Cormorant Garamond",serif;color:var(--ink);text-decoration:none;margin-right:auto;display:flex;align-items:center;gap:10px}
+.brand svg{width:26px;height:26px}
+nav a.l{color:var(--soft);text-decoration:none;font-size:15px}
+nav a.l:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 24px;border-radius:999px;font:600 16px "Be Vietnam Pro",sans-serif;text-decoration:none;border:1px solid transparent;cursor:pointer}
+.btn.main{background:var(--rose);color:var(--rose-ink)}
+.btn.main:hover{background:#ffa9c5}
+.btn.ghost{border-color:var(--line);color:var(--ink);background:transparent}
+.btn.ghost:hover{border-color:var(--lav)}
+.btn:focus-visible,input:focus-visible,.tab:focus-visible{outline:3px solid var(--lav);outline-offset:3px}
+.btn.sm{min-height:40px;padding:0 18px;font-size:15px}
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--bg)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(24px,4vw,64px);align-items:center;position:relative;z-index:1}
+.lead{font-size:19px;color:var(--soft);max-width:34em;margin:20px 0 28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.note{font-size:14px;color:var(--soft);margin-top:16px}
+.sky{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.stage{position:relative;min-height:470px;display:flex;align-items:center;justify-content:flex-end}
+.chat{position:relative;width:min(100%,460px);background:#1e1f22;border:1px solid #2e2f34;border-radius:16px;box-shadow:0 30px 60px -20px #0009;padding:16px 16px 8px;font-size:15px}
+.chat .head{display:flex;align-items:center;gap:8px;color:#b5bac1;font-size:14px;padding-bottom:10px;border-bottom:1px solid #2e2f34;margin-bottom:10px}
+.chat .head b{color:#f2f3f5}
+.msg{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;padding:7px 0}
+.av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:15px}
+.av.u{background:#5865f2;color:#fff}
+.av.b{background:#efeaff}
+.av.b svg{width:24px;height:24px}
+.who{font-weight:600;color:#f2f3f5;font-size:15px}
+.who .tag{background:#5865f2;color:#fff;font-size:10px;font-weight:600;border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:2px}
+.txt{color:#dbdee1}
+.txt i{color:#c9b8f0}
+.txt .m{color:#c9cdfb;background:#5865f24d;border-radius:4px;padding:0 3px}
+.np{margin-top:6px;border-left:4px solid #c9b8f0;background:#2b2d31;border-radius:4px;padding:8px 10px;color:#dbdee1;font-size:14px}
+.sample{font-size:12.5px;color:#80848e;text-align:right;padding:6px 2px 4px}
+/* features */
+.feats{background:var(--bg2)}
+.intro{color:var(--soft);max-width:44em;margin-bottom:36px;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px}
+.card svg{width:44px;height:44px}
+.card p{color:var(--soft);font-size:15.5px}
+.card code{display:block;margin-top:auto;padding-top:8px;font:500 14px/1.5 "Be Vietnam Pro",sans-serif;color:var(--lav)}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;counter-reset:s}
+.step{border-top:2px solid var(--lav);padding-top:18px}
+.step .n{font:700 48px "Cormorant Garamond",serif;color:var(--lav);line-height:1}
+.step h3{margin:6px 0 8px}
+.step p{color:var(--soft)}
+.perm{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px}
+.perm span{border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:14px;color:var(--soft)}
+/* commands */
+.cmds{background:var(--bg2)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px}
+.tab{min-height:42px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--soft);font:500 15px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.tab[aria-pressed=true]{background:var(--lav);border-color:var(--lav);color:#1a1438}
+#q{flex:1 1 220px;min-height:44px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:16px "Be Vietnam Pro",sans-serif;padding:0 18px}
+#q::placeholder{color:#8a82ad}
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.row{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:4px 16px;align-items:baseline}
+.row code{font:600 15px "Be Vietnam Pro",sans-serif;color:var(--ink);overflow-wrap:anywhere}
+.row span{color:var(--soft);font-size:15px}
+.row em{grid-column:1/-1;font-style:normal;font-size:14px;color:var(--lav)}
+.empty{color:var(--soft);padding:20px 0}
+/* faq + footer */
+.faq details{border-bottom:1px solid var(--line);padding:16px 0}
+.faq summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::after{content:"+";color:var(--lav);font-size:22px;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq p{color:var(--soft);margin-top:10px;max-width:60em}
+.end{background:var(--panel);text-align:left}
+.end .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
+footer{padding:24px max(5vw,16px);color:#8a82ad;font-size:14px;border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+@keyframes fall{from{transform:translateY(-40px) rotate(0)}to{transform:translateY(560px) rotate(160deg)}}
+.feather{animation:fall linear infinite}
+@media (prefers-reduced-motion:reduce){.feather{animation:none}html{scroll-behavior:auto}}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.list{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){.hero .wrap{grid-template-columns:minmax(0,1fr)}.stage{min-height:0;justify-content:center;padding:8px 0}.steps{grid-template-columns:minmax(0,1fr)}nav a.l{display:none}}
+@media(max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}.lead{font-size:17px}.row{grid-template-columns:minmax(0,1fr)}.chat{font-size:14px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="moon" viewBox="0 0 24 24"><path d="M15.5 2.5a9.5 9.5 0 1 0 6 16.9A8 8 0 0 1 15.5 2.5z" fill="#c9b8f0"/></symbol>
+    <symbol id="fea" viewBox="0 0 20 60"><path d="M10 58 C10 40 10 20 10 2" stroke="#d8d0f5" stroke-width="1.2" fill="none"/><path d="M10 4 C1 14 1 34 10 50 C19 34 19 14 10 4z" fill="#f4f1ff" opacity=".92"/><path d="M10 6 C6 18 6 32 10 48" stroke="#c9bdf0" stroke-width=".8" fill="none"/></symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><svg><use href="#moon"/></svg>Columbina</a>
+    <a class="l" href="#tinh-nang">Tính năng</a>
+    <a class="l" href="#bat-dau">Bắt đầu</a>
+    <a class="l" href="#lenh">Lệnh</a>
+    <a class="l" href="#hoi-dap">Hỏi đáp</a>
+    <a class="btn main sm invite" href="#moi">Mời bot</a>
+  </div>
+</nav>
+
+<header class="hero band" id="top">
+  <svg class="sky" id="sky" aria-hidden="true"></svg>
+  <div class="wrap">
+    <div>
+      <h1>Columbina</h1>
+      <p class="lead">Một cô gái mơ màng sống trong server Discord của bạn. Trò chuyện, nhớ từng người, hát nhạc trong voice, dịch tin nhắn và nhắc bạn đúng giờ.</p>
+      <div class="cta">
+        <a class="btn main invite" href="#moi">Mời Columbina vào server</a>
+        <a class="btn ghost" href="#lenh">Xem các lệnh</a>
+      </div>
+      <p class="note">Miễn phí. Gọi bot bằng cách <b>@Columbina</b> rồi nói tự nhiên bằng tiếng Việt hoặc tiếng Anh.</p>
+    </div>
+    <div class="stage">
+      <div class="chat" role="img" aria-label="Ví dụ trò chuyện với Columbina trên Discord">
+        <div class="head"># <b>chung</b></div>
+        <div class="msg"><div class="av u">A</div><div><div class="who">An</div><div class="txt"><span class="m">@Columbina</span> mở bài Nơi này có anh</div></div></div>
+        <div class="msg"><div class="av b"><svg><use href="#moon"/></svg></div><div><div class="who">Columbina<span class="tag">APP</span></div><div class="txt"><i>*mỉm cười*</i> Được thôi… <b>Nơi Này Có Anh</b> ♪</div>
+          <div class="np">🎶 Đang phát: <b>Nơi Này Có Anh</b> · 4:38</div></div></div>
+        <div class="msg"><div class="av u">A</div><div><div class="who">An</div><div class="txt"><span class="m">@Columbina</span> nhắc mình 10h sáng mai đi tập nha</div></div></div>
+        <div class="msg"><div class="av b"><svg><use href="#moon"/></svg></div><div><div class="who">Columbina<span class="tag">APP</span></div><div class="txt">⏰ Columbina sẽ nhắc ngươi <b>đi tập</b> lúc <b>10:00 ngày mai</b>.</div></div></div>
+        <div class="sample">Đoạn chat minh họa</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="feats band" id="tinh-nang">
+  <div class="wrap">
+    <h2>Mọi thứ Columbina làm được</h2>
+    <p class="intro">Không cần nhớ lệnh: nhắc tên Columbina và nói như nói với bạn bè. Lệnh gạch chéo vẫn có sẵn cho ai thích.</p>
+    <div class="grid" id="feats"></div>
+  </div>
+</section>
+
+<section class="band" id="bat-dau">
+  <div class="wrap">
+    <h2>Bắt đầu trong ba bước</h2>
+    <p class="intro">Chỉ người có quyền <b>Quản lý server</b> mới mời được bot.</p>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Mời bot</h3><p>Bấm <b>Mời Columbina</b>, chọn server của bạn và đồng ý các quyền bên dưới.</p></div>
+      <div class="step"><div class="n">2</div><h3>Chọn kênh (tuỳ chọn)</h3><p>Muốn Columbina chỉ nói ở vài kênh? Admin gõ <b>/kenh them</b> trong từng kênh đó.</p></div>
+      <div class="step"><div class="n">3</div><h3>Gọi tên cô ấy</h3><p>Gõ <b>@Columbina xin chào</b>. Vào voice rồi nói <b>@Columbina mở bài…</b> để nghe nhạc.</p></div>
+    </div>
+    <div class="perm" aria-label="Quyền bot cần"><span>Xem kênh</span><span>Gửi tin nhắn</span><span>Nhúng liên kết</span><span>Đọc lịch sử tin nhắn</span><span>Thêm biểu cảm</span><span>Kết nối voice</span><span>Nói trong voice</span></div>
+  </div>
+</section>
+
+<section class="cmds band" id="lenh">
+  <div class="wrap">
+    <h2>Lệnh và câu nói</h2>
+    <p class="intro">Câu nói tự nhiên dùng sau khi nhắc <b>@Columbina</b>. Lệnh gạch chéo gõ <b>/</b> để Discord gợi ý.</p>
+    <div class="tools">
+      <div id="tabs" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+      <input id="q" type="search" placeholder="Tìm lệnh, ví dụ: nhạc, nhắc, dịch" aria-label="Tìm lệnh">
+    </div>
+    <div class="list" id="list"></div>
+  </div>
+</section>
+
+<section class="band faq" id="hoi-dap">
+  <div class="wrap">
+    <h2>Hỏi đáp</h2>
+    <details><summary>Sao Columbina không trả lời?</summary><p>Bot chỉ trả lời khi được <b>@nhắc tên</b>, khi bạn reply tin nhắn của bot, hoặc nhắn riêng. Nếu admin đã giới hạn kênh bằng <b>/kenh</b>, hãy gọi ở kênh được phép. Columbina cũng có thể đang ngủ: gõ <b>/ngu phut:0</b> để đánh thức.</p></details>
+    <details><summary>Bot có online 24/7 không?</summary><p>Columbina chạy trên máy của chủ bot, nên chỉ online khi máy đó đang bật. Lúc bot offline, lời nhắc vẫn được giữ và sẽ được nhắc bù khi bot quay lại.</p></details>
+    <details><summary>Phát được nhạc từ đâu?</summary><p>Tên bài, link YouTube, playlist YouTube, link bài hát, album hoặc playlist Spotify. Với Spotify, bot đọc tên bài rồi tìm trên YouTube để phát. Mỗi bài tối đa 15 phút.</p></details>
+    <details><summary>Columbina nhớ gì về tôi? Xoá thế nào?</summary><p>Bot nhớ những điều bạn tự kể (tên gọi, sở thích, sinh nhật) để trò chuyện tự nhiên hơn. Gõ <b>/nho</b> để xem, <b>/quen</b> để xoá hết, <b>/reset</b> để xoá trí nhớ hội thoại của kênh.</p></details>
+    <details><summary>Nói chuyện bằng giọng trong voice có an toàn không?</summary><p>Chế độ nghe chỉ bật khi có người gõ <b>/voice nghe</b>. Bot chỉ phản hồi câu bắt đầu bằng tên <b>Columbina</b>. Tắt bằng <b>/voice nghe bat:False</b>.</p></details>
+  </div>
+</section>
+
+<section class="end band" id="moi">
+  <div class="wrap">
+    <div><h2>Mời Columbina về server</h2><p class="intro" style="margin:0">Cô ấy sẽ ngân nga chờ bạn gọi tên ♪</p></div>
+    <div class="cta"><a class="btn main invite" id="inviteMain" href="#moi">Mời bot</a><button class="btn ghost" id="copy" type="button">Sao chép link mời</button></div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>Columbina, bot Discord tự làm cho server bạn bè.</span><span>Nhân vật Columbina thuộc về HoYoverse; trang này không liên kết với HoYoverse hay Discord.</span></div></footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+{
+  // ====== Điền Application ID của bot vào đây ======
+  const CLIENT_ID = '1575233623471292476';
+  // Xem kênh, Gửi tin, Nhúng link, Đọc lịch sử, Thêm biểu cảm, Kết nối voice, Nói trong voice
+  const PERMISSIONS = 1024 + 2048 + 16384 + 65536 + 64 + 1048576 + 2097152;
+  const INVITE = CLIENT_ID ? `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&permissions=${PERMISSIONS}&scope=bot+applications.commands` : '';
+
+  const toastEl = document.getElementById('toast');
+  let tt;
+  const toast = (m) => { toastEl.textContent = m; toastEl.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => toastEl.classList.remove('on'), 2600); };
+
+  for (const a of document.querySelectorAll('.invite')) {
+    if (INVITE) { a.href = INVITE; a.target = '_blank'; a.rel = 'noopener'; }
+    else if (a.id === 'inviteMain') a.addEventListener('click', (e) => { e.preventDefault(); toast('Link mời đang được cập nhật, quay lại sau nhé'); });
+  }
+  document.getElementById('copy').addEventListener('click', async () => {
+    if (!INVITE) return toast('Link mời đang được cập nhật, quay lại sau nhé');
+    try { await navigator.clipboard.writeText(INVITE); toast('Đã sao chép link mời'); } catch { toast(INVITE); }
+  });
+
+  // ====== Tính năng ======
+  const icon = {
+    chat: '<path d="M6 10h32v20H18l-8 7v-7H6z" fill="#b9a7ff"/><circle cx="16" cy="20" r="2.2" fill="#120f24"/><circle cx="22" cy="20" r="2.2" fill="#120f24"/><circle cx="28" cy="20" r="2.2" fill="#120f24"/>',
+    music: '<path d="M16 32V12l20-4v20" stroke="#b9a7ff" stroke-width="3" fill="none"/><circle cx="12" cy="32" r="5" fill="#b9a7ff"/><circle cx="32" cy="28" r="5" fill="#ff8fb3"/>',
+    mic: '<rect x="16" y="6" width="12" height="20" rx="6" fill="#b9a7ff"/><path d="M10 22a12 12 0 0 0 24 0M22 34v5" stroke="#ff8fb3" stroke-width="3" fill="none"/>',
+    clock: '<circle cx="22" cy="23" r="15" fill="#b9a7ff"/><path d="M22 14v10l7 4" stroke="#120f24" stroke-width="3" fill="none"/>',
+    trans: '<rect x="4" y="8" width="22" height="18" rx="4" fill="#b9a7ff"/><rect x="18" y="18" width="22" height="18" rx="4" fill="#ff8fb3"/><text x="15" y="22" font-size="11" text-anchor="middle" fill="#120f24" font-weight="700">A</text><text x="29" y="32" font-size="11" text-anchor="middle" fill="#2a0f1c" font-weight="700">文</text>',
+    heart: '<path d="M22 37S6 27 6 16a8 8 0 0 1 16-2 8 8 0 0 1 16 2c0 11-16 21-16 21z" fill="#ff8fb3"/>',
+  };
+  const feats = [
+    ['chat', 'Trò chuyện và nhớ từng người', 'Hiểu ngữ cảnh cuộc trò chuyện, nhớ tên gọi, sở thích và sinh nhật của mỗi người. Gửi ảnh, cô ấy nhìn và bình luận.', '@Columbina hôm nay em thế nào?'],
+    ['music', 'Nhạc trong voice', 'YouTube, Spotify, playlist; lặp, trộn, âm lượng, tự phát bài liên quan và danh sách yêu thích riêng.', '@Columbina mở bài Lạc Trôi'],
+    ['mic', 'Nói chuyện bằng giọng', 'Columbina đọc to câu trả lời bằng giọng nữ tiếng Việt, và nghe khi bạn gọi tên cô ấy trong voice.', '“Columbina, qua bài”'],
+    ['clock', 'Nhắc việc đúng giờ', 'Nhắc một lần hoặc hằng ngày, trong kênh hay tin nhắn riêng. Hiểu cả “3 giờ chiều mai” và “30 phút nữa”.', '@Columbina nhắc mình 8h tối uống nước'],
+    ['trans', 'Dịch tin nhắn', 'Thả cờ quốc gia vào tin nhắn để dịch, chuột phải để dịch riêng cho mình, hoặc dùng /dich.', 'Thả 🇯🇵 vào một tin nhắn'],
+    ['heart', 'Những điều nhỏ xinh', 'Chào thành viên mới, chúc sinh nhật, hát ru rồi rời voice, thỉnh thoảng góp chuyện khi kênh đang vui.', '/haru'],
+  ];
+  document.getElementById('feats').innerHTML = feats.map(([k, t, d, ex]) =>
+    `<article class="card"><svg viewBox="0 0 44 44" aria-hidden="true">${icon[k]}</svg><h3>${t}</h3><p>${d}</p><code>${ex}</code></article>`).join('');
+
+  // ====== Danh sách lệnh ======
+  const CMDS = [
+    ['Trò chuyện', '@Columbina + câu hỏi', 'Hỏi gì cũng được, gửi kèm ảnh để cô ấy xem'],
+    ['Trò chuyện', '/ask', 'Hỏi bằng lệnh'],
+    ['Trò chuyện', '/hat', 'Hát một đoạn tự sáng tác', 'Có thể chọn chủ đề'],
+    ['Trò chuyện', '/boi', 'Bói vận mệnh hôm nay (để giải trí)'],
+    ['Trò chuyện', '/nho · /quen', 'Xem hoặc xoá những gì Columbina nhớ về bạn'],
+    ['Trò chuyện', '/reset', 'Xoá trí nhớ hội thoại của kênh'],
+    ['Trò chuyện', '/ngu', 'Cho Columbina ngủ trong kênh', '/ngu phut:0 để đánh thức'],
+    ['Nhạc', 'mở bài … · play …', 'Phát bài theo tên, link YouTube hoặc Spotify', 'Cũng có /phat và /play'],
+    ['Nhạc', 'qua bài · skip', 'Bỏ qua bài đang phát'],
+    ['Nhạc', 'dừng nhạc · stop', 'Dừng và xoá hàng đợi'],
+    ['Nhạc', 'tạm dừng · phát tiếp', 'Pause / resume'],
+    ['Nhạc', 'hàng đợi · np', 'Xem bài đang phát và các bài tiếp theo'],
+    ['Nhạc', 'lặp lại bài này · lặp hàng đợi · tắt lặp', 'Chế độ lặp', '/loop'],
+    ['Nhạc', 'trộn bài · shuffle', 'Xáo trộn hàng đợi'],
+    ['Nhạc', 'âm lượng 40 · to lên · nhỏ lại', 'Chỉnh âm lượng', '/volume'],
+    ['Nhạc', 'bật tự phát', 'Hết hàng đợi thì tự chọn bài liên quan', '/autoplay'],
+    ['Nhạc', 'xoá bài số 3', 'Bỏ một bài khỏi hàng đợi', '/remove'],
+    ['Nhạc', 'lưu bài này · mở danh sách yêu thích', 'Danh sách yêu thích riêng của bạn', '/yeuthich'],
+    ['Voice', '/voice vao · /voice roi', 'Vào hoặc rời kênh voice bạn đang ngồi'],
+    ['Voice', '/voice nghe', 'Bật nghe giọng nói, gọi “Columbina” ở đầu câu'],
+    ['Voice', '/noi', 'Bảo Columbina nói một câu'],
+    ['Voice', '/haru', 'Hát ru, mở nhạc nhẹ rồi tự rời voice', 'Chọn số phút ở lại'],
+    ['Nhắc việc', 'nhắc mình 10h sáng mai đi tập', 'Nhắc một lần', 'Hiểu sáng/chiều/tối, mai, rưỡi'],
+    ['Nhắc việc', 'nhắc mình 8h tối hằng ngày uống nước', 'Nhắc mỗi ngày'],
+    ['Nhắc việc', 'nhắc mình 30 phút nữa tắt bếp', 'Nhắc sau một khoảng thời gian'],
+    ['Nhắc việc', '/nhacnho · /remind', 'Thêm, xem, xoá lời nhắc', 'Chọn rieng để nhắc qua DM'],
+    ['Dịch', 'Thả cờ 🇻🇳 🇺🇸 🇯🇵 🇰🇷 🇨🇳…', 'Dịch tin nhắn sang ngôn ngữ đó'],
+    ['Dịch', 'Chuột phải → Apps → Dịch sang tiếng Việt', 'Bản dịch chỉ mình bạn thấy'],
+    ['Dịch', '/dich', 'Dịch một đoạn văn bản'],
+    ['Quản lý', '/kenh them · xoa · xem · tatca', 'Chọn kênh Columbina được trò chuyện', 'Cần quyền Quản lý kênh'],
+  ];
+  const cats = ['Tất cả', ...new Set(CMDS.map((c) => c[0]))];
+  let cat = 'Tất cả';
+  const tabs = document.getElementById('tabs');
+  const q = document.getElementById('q');
+  const list = document.getElementById('list');
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase();
+  const renderTabs = () => { tabs.innerHTML = cats.map((c) => `<button class="tab" type="button" aria-pressed="${c === cat}" data-c="${esc(c)}">${esc(c)}</button>`).join(''); };
+  const renderList = () => {
+    const k = norm(q.value.trim());
+    const rows = CMDS.filter((c) => (cat === 'Tất cả' || c[0] === cat) && (!k || norm(c.join(' ')).includes(k)));
+    list.innerHTML = rows.length
+      ? rows.map(([, c, d, x]) => `<div class="row"><code>${esc(c)}</code><span>${esc(d)}</span>${x ? `<em>${esc(x)}</em>` : ''}</div>`).join('')
+      : '<p class="empty">Không tìm thấy lệnh nào. Thử từ khác nhé.</p>';
+  };
+  tabs.addEventListener('click', (e) => { const b = e.target.closest('.tab'); if (!b) return; cat = b.dataset.c; renderTabs(); renderList(); });
+  q.addEventListener('input', renderList);
+  renderTabs(); renderList();
+
+  // ====== Bầu trời: trăng, sao, lông vũ ======
+  const sky = document.getElementById('sky');
+  const drawSky = () => {
+    const W = sky.clientWidth, H = sky.clientHeight;
+    if (!W || !H) return;
+    let s = 7;
+    const rnd = () => (s = s * 16807 % 2147483647) / 2147483647;
+    const narrow = W < 760;
+    // Điện thoại: trăng nằm sau khung chat, không che chữ
+    const mx = narrow ? W * 0.8 : W * 0.7, my = narrow ? H * 0.66 : H * 0.42, r = narrow ? Math.min(W * 0.24, 100) : Math.min(H * 0.36, 210);
+    let out = '<defs><radialGradient id="glow"><stop offset="0" stop-color="#b9a7ff" stop-opacity=".35"/><stop offset="1" stop-color="#b9a7ff" stop-opacity="0"/></radialGradient><radialGradient id="mface" cx=".38" cy=".35"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9d0ff"/></radialGradient></defs>';
+    for (let i = 0; i < 90; i++) out += `<circle cx="${(rnd() * W).toFixed(1)}" cy="${(rnd() * H).toFixed(1)}" r="${(rnd() * 1.3 + .3).toFixed(2)}" fill="#e9e4ff" opacity="${(rnd() * .6 + .2).toFixed(2)}"/>`;
+    out += `<circle cx="${mx}" cy="${my}" r="${r * 2}" fill="url(#glow)"/><circle cx="${mx}" cy="${my}" r="${r}" fill="url(#mface)"/>`;
+    out += `<circle cx="${mx - r * .3}" cy="${my - r * .2}" r="${r * .14}" fill="#cfc4f7" opacity=".6"/><circle cx="${mx + r * .28}" cy="${my + r * .22}" r="${r * .2}" fill="#cfc4f7" opacity=".5"/><circle cx="${mx + r * .05}" cy="${my - r * .45}" r="${r * .08}" fill="#cfc4f7" opacity=".6"/>`;
+    out += `<path d="M0 ${H} L0 ${H * .88} Q ${W * .25} ${H * .8} ${W * .5} ${H * .9} T ${W} ${H * .84} L ${W} ${H}z" fill="#1b1636"/>`;
+    for (let i = 0; i < (narrow ? 7 : 12); i++) {
+      // Lông vũ chỉ rơi ở nửa phải (máy tính) hoặc quanh khung chat (điện thoại), tránh đè lên chữ
+      const x = narrow ? W * .55 + rnd() * W * .45 : W * .52 + rnd() * W * .48, y0 = narrow ? H * .5 + rnd() * H * .1 : rnd() * H * .2;
+      const sc = rnd() * .5 + .5, d = (rnd() * 10 + 9).toFixed(1), del = (-rnd() * 18).toFixed(1);
+      out += `<g transform="translate(${x.toFixed(0)} ${y0.toFixed(0)})"><use href="#fea" class="feather" width="${20 * sc}" height="${60 * sc}" style="animation-duration:${d}s;animation-delay:${del}s;opacity:${(.4 + rnd() * .5).toFixed(2)}"/></g>`;
+    }
+    for (let i = 0; i < 4; i++) out += `<text x="${(mx - r * 1.4 + rnd() * r * 2.6).toFixed(0)}" y="${(my + r * 1.25 + rnd() * 40).toFixed(0)}" font-size="${(16 + rnd() * 10).toFixed(0)}" fill="#b9a7ff" opacity=".55">♪</text>`;
+    sky.innerHTML = out;
+  };
+  const skyRO = new ResizeObserver(drawSky);
+  skyRO.observe(sky);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+node_modules/
+.env
+memory.json
+users.json
+settings.json
+favorites.json
+reminders.json
+logs/
+backups/
+# file lớn / bản cũ / không liên quan
+yt-dlp.exe
+index.backup.js
+index.v1.js
+banggia.txt
+*.lnk
