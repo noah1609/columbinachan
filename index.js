@@ -1156,6 +1156,7 @@ const commands = [
         { name: 'Ngang', value: 'landscape', name_localizations: loc('Landscape') },
         { name: 'Dọc', value: 'portrait', name_localizations: loc('Portrait') },
       )),
+  T(new SlashCommandBuilder().setName('ungho').setDescription(`Ủng hộ ${BOT_NAME} (mã QR chuyển khoản)`), 'donate', `Support ${BOT_NAME} (bank transfer QR)`),
   T(new SlashCommandBuilder().setName('chaosang').setDescription(`Bật/tắt ${BOT_NAME} chào buổi sáng mỗi ngày (admin)`), 'morning', `Turn ${BOT_NAME}'s daily good-morning on/off (admin)`)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setDMPermission(false)
@@ -1201,7 +1202,7 @@ client.once(Events.ClientReady, async (c) => {
   try {
     await new REST({ version: '10' }).setToken(DISCORD_TOKEN)
       .put(Routes.applicationCommands(c.user.id), { body: commands });
-    console.log('✅ Đã đăng ký lệnh: /ask /reset /ve /ngonngu /chaosang /bieucam /baotri /nhacnho /remind /dich /hat /boi /ngu /nho /quen /kenh /voice /noi /phat /nhac /yeuthich /haru /play /skip /stop /pause /resume /queue /loop /shuffle /volume /autoplay /remove /leave + menu Dịch, Ảnh trích dẫn');
+    console.log('✅ Đã đăng ký lệnh: /ask /reset /ve /ungho /ngonngu /chaosang /bieucam /baotri /nhacnho /remind /dich /hat /boi /ngu /nho /quen /kenh /voice /noi /phat /nhac /yeuthich /haru /play /skip /stop /pause /resume /queue /loop /shuffle /volume /autoplay /remove /leave + menu Dịch, Ảnh trích dẫn');
   } catch (err) {
     console.error('Lỗi đăng ký slash command:', err);
   }
@@ -1336,6 +1337,21 @@ client.on(Events.InteractionCreate, async (interaction) => {
           : tx(L, '⚠️ Bức tranh chưa vẽ xong… thử lại sau nhé.', '⚠️ The painting isn\'t ready… please try again later.'));
     }
     return;
+  }
+
+  if (commandName === 'ungho') {
+    // Mã QR lấy từ file donate.png nằm cạnh index.js (chủ bot tự lưu từ app ngân hàng).
+    const site = process.env.WEBSITE_URL && process.env.WEBSITE_URL !== 'off' ? process.env.WEBSITE_URL : 'https://columbinanoah.netlify.app';
+    if (!existsSync('./donate.png')) {
+      return interaction.reply({ content: tx(L, '🌙 Chủ bot chưa đặt mã ủng hộ. Cảm ơn tấm lòng của bạn nhé ♪', '🌙 The owner hasn\'t set up donations yet. Thank you for the kind thought ♪'), flags: MessageFlags.Ephemeral });
+    }
+    return interaction.reply({
+      content: tx(L,
+        `🌙 *khẽ cúi chào…* Cảm ơn bạn đã muốn ủng hộ ${BOT_NAME} ♪\nQuét mã QR bên dưới bằng app ngân hàng. Mọi khoản ủng hộ đều dùng để duy trì và nâng cấp bot.\n${site}/#ung-ho`,
+        `🌙 *a gentle bow…* Thank you for wanting to support ${BOT_NAME} ♪\nScan the QR below with a Vietnamese banking app (VietQR). Every bit goes into keeping the bot running and improving.\n${site}/#ung-ho`),
+      files: [new AttachmentBuilder(readFileSync('./donate.png'), { name: 'ungho.png' })],
+      flags: MessageFlags.Ephemeral,
+    });
   }
 
   if (commandName === 'chaosang') {

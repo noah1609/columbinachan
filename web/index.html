@@ -99,6 +99,9 @@ nav a.l:hover{color:var(--ink)}
 .faq details[open] summary::after{content:"–"}
 .faq p{color:var(--soft);margin-top:10px;max-width:60em}
 .end{background:var(--panel);text-align:left}
+.donate .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:32px}
+.donate .qr{width:240px;max-width:100%;border-radius:16px;background:#fff;padding:10px}
+.donate p{color:var(--soft);max-width:34em;margin-top:10px}
 .end .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
 footer{padding:24px max(5vw,16px);color:#8a82ad;font-size:14px;border-top:1px solid var(--line)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
@@ -127,6 +130,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
     <a class="l" href="#bat-dau">Bắt đầu</a>
     <a class="l" href="#lenh">Lệnh</a>
     <a class="l" href="#hoi-dap">Hỏi đáp</a>
+    <a class="l" href="#ung-ho">Ủng hộ</a>
     <a class="btn main sm invite" href="#moi">Mời bot</a>
   </div>
 </nav>
@@ -150,7 +154,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
         <div class="msg"><div class="av b"><svg><use href="#moon"/></svg></div><div><div class="who">Columbina<span class="tag">APP</span></div><div class="txt"><i>*mỉm cười*</i> Được thôi… <b>Nơi Này Có Anh</b> ♪</div>
           <div class="np">🎶 Đang phát: <b>Nơi Này Có Anh</b> · 4:38</div></div></div>
         <div class="msg"><div class="av u">A</div><div><div class="who">An</div><div class="txt"><span class="m">@Columbina</span> nhắc mình 10h sáng mai đi tập nha</div></div></div>
-        <div class="msg"><div class="av b"><svg><use href="#moon"/></svg></div><div><div class="who">Columbina<span class="tag">APP</span></div><div class="txt">⏰ Columbina sẽ nhắc ngươi <b>đi tập</b> lúc <b>10:00 ngày mai</b>.</div></div></div>
+        <div class="msg"><div class="av b"><svg><use href="#moon"/></svg></div><div><div class="who">Columbina<span class="tag">APP</span></div><div class="txt">⏰ Columbina sẽ nhắc bạn <b>đi tập</b> lúc <b>10:00 ngày mai</b>.</div></div></div>
         <div class="sample">Đoạn chat minh họa</div>
       </div>
     </div>
@@ -198,6 +202,16 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
     <details><summary>Phát được nhạc từ đâu?</summary><p>Tên bài, link YouTube, playlist YouTube, link bài hát, album hoặc playlist Spotify. Với Spotify, bot đọc tên bài rồi tìm trên YouTube để phát. Mỗi bài tối đa 15 phút.</p></details>
     <details><summary>Columbina nhớ gì về tôi? Xoá thế nào?</summary><p>Bot nhớ những điều bạn tự kể (tên gọi, sở thích, sinh nhật) để trò chuyện tự nhiên hơn. Gõ <b>/nho</b> để xem, <b>/quen</b> để xoá hết, <b>/reset</b> để xoá trí nhớ hội thoại của kênh.</p></details>
     <details><summary>Nói chuyện bằng giọng trong voice có an toàn không?</summary><p>Chế độ nghe chỉ bật khi có người gõ <b>/voice nghe</b>. Bot chỉ phản hồi câu bắt đầu bằng tên <b>Columbina</b>. Tắt bằng <b>/voice nghe bat:False</b>.</p></details>
+  </div>
+</section>
+
+<section class="band donate" id="ung-ho">
+  <div class="wrap">
+    <img class="qr" src="donate.png" alt="Mã QR chuyển khoản ủng hộ Columbina" onerror="this.closest('section').hidden=true;document.querySelector('a[href=\'#ung-ho\']').hidden=true">
+    <div>
+      <h2>Ủng hộ Columbina</h2>
+      <p>Columbina miễn phí cho mọi người. Nếu bạn thích cô ấy, có thể mời chủ bot một ly trà sữa bằng cách quét mã QR này trong app ngân hàng. Mọi khoản ủng hộ đều dùng để duy trì và nâng cấp bot. Cảm ơn bạn ♪</p>
+    </div>
   </div>
 </section>
 

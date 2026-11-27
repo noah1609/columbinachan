@@ -127,7 +127,8 @@ Các biến trên đều có giá trị mặc định, không cần thêm vào `
 - **Bot xem ảnh:** gửi ảnh kèm @Columbina (bài tập, ảnh chụp màn hình, ảnh gacha…). Model đọc ảnh chép lại chữ/công thức, rồi model chính giải và trả lời theo giọng Columbina. Nội dung ảnh được nhớ lại nên hỏi tiếp được. Bot tự dò model đọc ảnh còn hoạt động trên Groq lúc khởi động (dòng `👁️ Model đọc ảnh:` trong terminal); muốn chỉ định thì đặt `VISION_MODELS=...`.
 - **Bot gửi ảnh:** khi bạn nhờ vẽ, nhờ gửi ảnh hay "cho anh xem…", Columbina tự vẽ và gắn ảnh vào câu trả lời (chữ hiện trước, ảnh hiện sau vài giây).
 - **`/ve mo_ta:...`** (tiếng Anh `/draw`): tự mô tả bức tranh muốn vẽ, chọn khổ vuông / ngang / dọc.
-- Dùng Pollinations.ai miễn phí: khoảng 1 ảnh / 15 giây (bot tự xếp hàng), có thể có watermark. Đăng ký token ở auth.pollinations.ai rồi đặt `POLLINATIONS_TOKEN=...` trong `.env` để nhanh hơn, không watermark.
+- **`/ungho`** (tiếng Anh `/donate`): gửi mã QR chuyển khoản ủng hộ (chỉ người gõ thấy). Lưu ảnh QR từ app ngân hàng thành `donate.png` cạnh `index.js`, và một bản trong `web/` để hiện trên trang web.
+- Dùng Pollinations.ai miễn phí: khoảng 1 ảnh / 15 giây (bot tự xếp hàng), có logo nhỏ, đôi khi quá tải (bot tự thử lại). Lấy key miễn phí ở enter.pollinations.ai rồi đặt `POLLINATIONS_KEY=...` trong `.env` để ổn định hơn, không logo.
 - Không vẽ người thật, nhân vật có bản quyền, nội dung 18+ hay máu me. Tắt hẳn: `IMAGE_GEN=off`.
 
 ## Giờ ngủ, ngày lễ, ảnh trích dẫn
