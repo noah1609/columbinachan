@@ -736,8 +736,8 @@ discoverVisionModels();
 // Bỏ phần "suy nghĩ" <think>…</think> mà một số model tự in ra
 const stripThink = (t) => t.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
 
-async function callGroq(messages, maxTokens = 1500, vision = false) {
-  const models = (vision ? visionModels : [MODEL, FALLBACK_MODEL]).filter((m, i, a) => m && a.indexOf(m) === i);
+async function callGroq(messages, maxTokens = 1500, vision = false, preferModels = null) {
+  const models = (vision ? visionModels : preferModels || [MODEL, FALLBACK_MODEL]).filter((m, i, a) => m && a.indexOf(m) === i);
   let lastErr;
   for (const model of models) {
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -748,13 +748,14 @@ async function callGroq(messages, maxTokens = 1500, vision = false) {
     if (res.ok) {
       const data = await res.json();
       if (vision && visionModels[0] !== model) visionModels = [model, ...visionModels.filter((m) => m !== model)]; // lần sau dùng luôn model chạy được
-      else if (!vision && model !== MODEL) console.log(`↪️ Đã dùng model dự phòng: ${model}`);
+      else if (!vision && model !== models[0]) console.log(`↪️ Đã dùng model dự phòng: ${model}`);
       return stripThink(data.choices?.[0]?.message?.content || '');
     }
     const body = await res.text();
     lastErr = new Error(`Groq API lỗi ${res.status} (${model}): ${body.slice(0, 300)}`);
     lastErr.status = res.status;
-    console.warn(lastErr.message);
+    // 429 = hết lượt tạm thời (bot tự chuyển model), chỉ ghi 1 dòng ngắn cho đỡ rối
+    console.warn(res.status === 429 ? `⏳ Groq hết lượt tạm thời (${model}), chuyển model khác…` : lastErr.message);
     if (res.status === 401) break; // sai API key thì thử model khác cũng vô ích
     if (vision && (res.status === 404 || /model_not_found|decommission/i.test(body))) visionModels = visionModels.filter((m) => m !== model);
     // Model chữ: chỉ đổi model khi hết lượt / Groq lỗi. Model ảnh: model không tồn tại cũng đổi.
@@ -1168,7 +1169,8 @@ const commands = [
   T(new SlashCommandBuilder().setName('baotri').setDescription('Chủ bot: xem lỗi gần đây, sao lưu dữ liệu'), 'maintenance', 'Bot owner: recent errors, backup data')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addSubcommand((sc) => T(sc.setName('loi').setDescription('Xem 10 lỗi gần nhất'), 'errors', 'Show the 10 most recent errors'))
-    .addSubcommand((sc) => T(sc.setName('saoluu').setDescription('Sao lưu dữ liệu ngay bây giờ'), 'backup', 'Back up data right now')),
+    .addSubcommand((sc) => T(sc.setName('saoluu').setDescription('Sao lưu dữ liệu ngay bây giờ'), 'backup', 'Back up data right now'))
+    .addSubcommand((sc) => T(sc.setName('server').setDescription('Xem bot đang ở bao nhiêu server'), 'servers', 'See how many servers the bot is in')),
   // Lệnh tiếng Anh cho nhạc
   new SlashCommandBuilder().setName('play').setDescription('Play a song (name, YouTube or Spotify link)').setDMPermission(false)
     .addStringOption((o) => o.setName('song').setDescription('Song name or link').setRequired(true)),
@@ -1194,6 +1196,7 @@ const commands = [
 
 client.once(Events.ClientReady, async (c) => {
   console.log(`✅ Đã đăng nhập: ${c.user.tag}`);
+  console.log(`🏰 Đang ở ${c.guilds.cache.size} server`);
   rotateStatus();
   setInterval(rotateStatus, 5 * 60 * 1000);
   // Đổi trạng thái ngay khi vừa ngủ / vừa thức dậy
@@ -1228,8 +1231,12 @@ const langChosenText = (L) => tx(L,
   '🇬🇧 *smiles* From now on Columbina will speak **English** in this server ♪ Mention **@Columbina** to talk to me. Change it anytime with `/language`.');
 
 // Bot vừa được mời vào server mới: hỏi chọn ngôn ngữ
+client.on(Events.GuildDelete, (guild) => {
+  console.log(`👋 Bị xoá khỏi server: ${guild.name ?? guild.id} (còn ${client.guilds.cache.size} server)`);
+});
+
 client.on(Events.GuildCreate, async (guild) => {
-  console.log(`🏠 Được mời vào server: ${guild.name}`);
+  console.log(`🏠 Được mời vào server: ${guild.name} (giờ đang ở ${client.guilds.cache.size} server)`);
   if (settings[guild.id]?.lang) return;
   const me = guild.members.me;
   const canSend = (ch) => ch?.isTextBased() && ch.permissionsFor(me)?.has(['ViewChannel', 'SendMessages']);
@@ -1374,6 +1381,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
   if (commandName === 'baotri') {
     if (user.id !== OWNER_ID) return interaction.reply({ content: tx(L, 'Chỉ chủ bot mới dùng được lệnh này.', 'Only the bot owner can use this.'), flags: MessageFlags.Ephemeral });
+    if (interaction.options.getSubcommand() === 'server') {
+      const list = [...client.guilds.cache.values()].sort((a, b) => b.memberCount - a.memberCount);
+      const total = list.reduce((s, g) => s + (g.memberCount || 0), 0);
+      const lines = list.slice(0, 40).map((g, i) => `${i + 1}. ${g.name} — ${g.memberCount} ${tx(L, 'người', 'members')}`);
+      if (list.length > 40) lines.push(tx(L, `…và ${list.length - 40} server khác`, `…and ${list.length - 40} more`));
+      return interaction.reply({ content: `🏰 ${tx(L, `Đang ở **${list.length}** server, tổng **${total}** người`, `In **${list.length}** servers, **${total}** members total`)}\n${lines.join('\n')}`.slice(0, 1950), flags: MessageFlags.Ephemeral });
+    }
     if (interaction.options.getSubcommand() === 'saoluu') {
       const r = maint.backupNow({ force: true });
       return interaction.reply({ content: r ? tx(L, `💾 Đã sao lưu ${r.count} file vào \`${r.dir}\``, `💾 Backed up ${r.count} files to \`${r.dir}\``) : tx(L, '⚠️ Sao lưu lỗi, xem terminal.', '⚠️ Backup failed, check the terminal.'), flags: MessageFlags.Ephemeral });
@@ -1691,24 +1705,33 @@ function trackActiveChannel(msg) {
 
 const todayKey = (d = new Date()) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 
+let morningRunning = false;
 async function morningGreetings() {
+  if (morningRunning) return; // lượt trước còn đang chào lần lượt thì thôi
+  morningRunning = true;
+  try { await morningGreetingsRun(); } finally { morningRunning = false; }
+}
+async function morningGreetingsRun() {
   if (!MORNING_GREETING || isNightSleep()) return;
   const now = new Date();
   if (now.getHours() !== WAKE_HOUR) return; // chỉ trong giờ thức dậy (vd 7:00–7:59)
   const occ = occasionOf(now);
+  let sent = 0;
   for (const [gid, g] of Object.entries(settings)) {
     if (g.morning === false || !g.lastChannel || g.lastMorning === todayKey(now)) continue;
     if (Date.now() - (g.lastActive || 0) > ACTIVE_DAYS * 86400000) continue;
     g.lastMorning = todayKey(now);
     saveSettings();
     const L = langOf(gid);
+    // Chào lần lượt, cách nhau 20 giây, để không dồn hết lượt AI một lúc khi bot ở nhiều server
+    if (sent++ > 0) await new Promise((r) => setTimeout(r, 20000));
     try {
       const channel = await client.channels.fetch(g.lastChannel);
       if (!channel?.isTextBased()) continue;
       const raw = await callGroq([
         systemMessage(null, L),
         { role: 'user', content: `[Bạn vừa thức dậy buổi sáng. Hãy chào buổi sáng cả server 1–3 câu, mơ màng dễ thương, đúng tính cách${occ ? `, và chúc mừng ${occ.vi}` : ''}. Không tag ai, không thêm thẻ ghi nhớ.]` },
-      ], 400);
+      ], 400, false, [FALLBACK_MODEL, MODEL]); // câu chào ngắn: dùng model nhỏ, giữ lượt model lớn cho trò chuyện
       const text = stripNamePrefix(raw.replace(/\[\[[^\]]*\]\]/g, '')).trim()
         || tx(L, '*dụi mắt…* Chào buổi sáng mọi người ♪~', '*rubs her eyes…* Good morning, everyone ♪~');
       await channel.send({ content: `${occ ? occ.emoji[0] : '☀️'} ${text}`.slice(0, 1900), allowedMentions: { parse: [] } });
